@@ -8,6 +8,7 @@ from tokenizers import Tokenizer
 
 # Regular expression matching whitespace:
 from unidecode import unidecode
+from tts_preprocess_et.convert import convert_sentence
 
 _whitespace_re = re.compile(r'\s+')
 
@@ -141,10 +142,8 @@ def transliteration_cleaners(text):
 
 def english_cleaners(text):
   '''Pipeline for English text, including number and abbreviation expansion.'''
-  text = convert_to_ascii(text)
+  text = convert_sentence(text) #estonian
   text = lowercase(text)
-  text = expand_numbers(text)
-  text = expand_abbreviations(text)
   text = collapse_whitespace(text)
   text = text.replace('"', '')
   return text
@@ -166,8 +165,7 @@ def lev_distance(s1, s2):
   return distances[-1]
 
 
-DEFAULT_VOCAB_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../data/tokenizer.json')
-
+DEFAULT_VOCAB_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../data/custom_language_tokenizer.json')
 
 class VoiceBpeTokenizer:
     def __init__(self, vocab_file=None, use_basic_cleaners=False):
